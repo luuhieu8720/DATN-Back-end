@@ -57,9 +57,15 @@ namespace DATN_Back_end.Repositories
             return entry;
         }
 
-        public Task Update(Guid id, ReportForm reportForm)
+        public async Task Update(Guid id, ReportForm reportForm)
         {
-            throw new NotImplementedException();
+            var reportFormDto = new ReportFormDto();
+
+            reportForm.CopyTo(reportFormDto);
+            reportFormDto.UploadFileLink = await cloudinaryService.UploadFile(reportForm.File);
+            reportFormDto.UpdatedTime = DateTime.Now;
+
+            await base.Update(id, reportFormDto);
         }
     }
 }

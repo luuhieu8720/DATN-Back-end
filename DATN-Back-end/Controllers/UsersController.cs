@@ -27,6 +27,9 @@ namespace DATN_Back_end.Controllers
         public async Task<UserDetail> Get(Guid id) => await userRepository.Get<UserDetail>(id);
 
         [HttpPost]
-        public async Task Create([FromBody] UserForm userForm) => await userRepository.Create(userForm);
+        public async Task Create([FromBody] UserFormCreate userForm) => await userRepository.Create(userForm);
+
+        [HttpPut("{id}")]
+        public async Task Update(Guid id, [FromBody] UserFormUpdate userForm) => await userRepository.Update(id, userForm);
     }
 }

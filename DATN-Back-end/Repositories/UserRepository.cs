@@ -18,7 +18,7 @@ namespace DATN_Back_end.Repositories
             this.dataContext = dataContext;
         }
 
-        public async Task Create(UserForm userForm)
+        public async Task Create(UserFormCreate userForm)
         {
             userForm.Password = userForm.Password.Encrypt();
 
@@ -28,6 +28,11 @@ namespace DATN_Back_end.Repositories
         public async Task<User> GetById(Guid Id)
         {
             return await dataContext.Users.FindAsync(Id);
+        }
+
+        public async Task<User> Get(string email)
+        {
+            return await dataContext.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
     }
 }

@@ -37,6 +37,8 @@ namespace DATN_Back_end
             services.ConfigType<PostgresConfig>(Configuration);
             services.ConfigType<TokenConfig>(Configuration);
             services.ConfigType<CloudinaryConfig>(Configuration);
+            services.ConfigType<ApplicationConfig>(Configuration);
+            services.ConfigType<MailConfig>(Configuration);
             services.AddMvc(ConfigMvc).ConfigureJson();
             services.AddHttpContextAccessor();
             services.ConfigSecurity();
@@ -56,6 +58,9 @@ namespace DATN_Back_end
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IForgetPasswordService, ForgetPasswordService>();
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<ISendMailService, SendMailService>();
         }
 
         private void ConfigMvc(MvcOptions options)

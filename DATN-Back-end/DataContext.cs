@@ -50,5 +50,7 @@ namespace DATN_Back_end
         public virtual DbSet<Comment> Comments { get; set; }
 
         public virtual DbSet<Timekeeping> Timekeepings { get; set; }
+
+        public virtual DbSet<ForgetPassword> ForgetPasswords { get; set; }
     }
 }

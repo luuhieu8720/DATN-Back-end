@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DATN_Back_end.Dto.DtoUser
 {
-    public class UserForm
+    public class UserFormUpdate
     {
         public string FirstName { get; set; }
 
@@ -17,8 +17,6 @@ namespace DATN_Back_end.Dto.DtoUser
         public string Email { get; set; }
 
         public string Username { get; set; }
-
-        public string Password { get; set; }
 
         public Guid? DepartmentId { get; set; }
 

@@ -28,5 +28,11 @@ namespace DATN_Back_end.Controllers
 
         [HttpPost]
         public async Task Create(ReportForm reportForm) => await reportRepository.Create(reportForm);
+
+        [HttpGet("{id}")]
+        public async Task Get(Guid id) => await reportRepository.Get(id);
+
+        [HttpPut("{id}")]
+        public async Task Update(Guid id, ReportForm reportForm) => await reportRepository.Update(id, reportForm);
     }
 }

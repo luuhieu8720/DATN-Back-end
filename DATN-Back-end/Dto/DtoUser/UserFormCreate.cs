@@ -1,12 +1,12 @@
-﻿using System;
+﻿using DATN_Back_end.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DATN_Back_end.Models
+namespace DATN_Back_end.Dto.DtoUser
 {
-    public class User : BaseModel
+    public class UserFormCreate
     {
         public string FirstName { get; set; }
 
@@ -21,11 +21,7 @@ namespace DATN_Back_end.Models
         public string Password { get; set; }
 
         public Guid? DepartmentId { get; set; }
-        [ForeignKey(nameof(DepartmentId))]
-
-        public Department? Department { get; set; }
 
         public Role Role { get; set; }
-        public List<ForgetPassword> ForgetPasswords { get; internal set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DATN_Back_end.Extensions
@@ -19,6 +20,12 @@ namespace DATN_Back_end.Extensions
             var byteHash = md5Hash.ComputeHash(byteSourceContext);
 
             return string.Concat(byteHash.Select(x => x.ToString("x2")));
+        }
+
+        public static string FindRegex(this string source, string pattern)
+        {
+            var rx = new Regex(pattern);
+            return rx.Match(source).Groups[1].Value;
         }
     }
 }

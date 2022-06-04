@@ -23,7 +23,8 @@ namespace DATN_Back_end.Services
             cfg.CreateMap<User, UserItem>();
             cfg.CreateMap<User, UserDetail>();
             cfg.CreateMap<UserDetail, User>();
-            cfg.CreateMap<UserForm, User>();
+            cfg.CreateMap<UserFormCreate, User>();
+            cfg.CreateMap<UserFormUpdate, User>();
 
             cfg.CreateMap<Department, DepartmentDetail>();
             cfg.CreateMap<Department, DepartmentItem>()
@@ -54,6 +55,7 @@ namespace DATN_Back_end.Services
                                                 .Select(x => x)));
             cfg.CreateMap<ReportForm, Report>();
             cfg.CreateMap<ReportForm, ReportFormDto>();
+            cfg.CreateMap<ReportFormDto, Report>();
         }
 
         public static T ConvertTo<T>(this object source)
