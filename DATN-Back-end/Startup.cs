@@ -33,7 +33,6 @@ namespace DATN_Back_end
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.ConfigDatabase();
             services.ConfigType<PostgresConfig>(Configuration);
             services.ConfigType<TokenConfig>(Configuration);
             services.ConfigType<CloudinaryConfig>(Configuration);
@@ -41,7 +40,6 @@ namespace DATN_Back_end
             services.ConfigType<MailConfig>(Configuration);
             services.AddMvc(ConfigMvc).ConfigureJson();
             services.AddHttpContextAccessor();
-            services.ConfigSecurity();
 
             services.AddSwaggerGen(c =>
             {
@@ -61,6 +59,11 @@ namespace DATN_Back_end
             services.AddScoped<IForgetPasswordService, ForgetPasswordService>();
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<ISendMailService, SendMailService>();
+
+            services.ConfigDatabase();
+            services.ConfigSecurity();
+            services.AddHealthChecks();
+            services.MigrateDatabase();
         }
 
         private void ConfigMvc(MvcOptions options)
@@ -75,19 +78,27 @@ namespace DATN_Back_end
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DATN_Back_end v1"));
             }
 
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+
+            app.AddSwagger();
+
             app.UseHttpsRedirection();
+
+            app.UseHealthChecks("/health");
 
             app.UseRouting();
 
             app.UseDefaultFiles();
 
-            app.UseAuthentication();
-
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMiddleware<TokenProviderMiddleware>();
 
