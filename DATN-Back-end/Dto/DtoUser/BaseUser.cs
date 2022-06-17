@@ -14,5 +14,7 @@ namespace DATN_Back_end.Dto.DtoUser
         public string LastName { get; set; }
 
         public string Email { get; set; }
+
+        public string Username { get; set; }
     }
 }

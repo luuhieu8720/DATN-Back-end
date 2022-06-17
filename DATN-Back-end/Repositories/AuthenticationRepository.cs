@@ -19,7 +19,7 @@ namespace DATN_Back_end.Repositories
         public async Task<User> Login(LoginForm loginForm)
         {
             return await dataContext.Users
-                            .FirstOrDefaultAsync(x => x.Email == loginForm.Email && x.Password == loginForm.Password.Encrypt())
+                            .FirstOrDefaultAsync(x => x.Email == loginForm.EmailOrUsername || x.Username == loginForm.EmailOrUsername && x.Password == loginForm.Password.Encrypt())
                            ?? throw new BadRequestException("Wrong email or password");
         }
     }

@@ -8,8 +8,8 @@ namespace DATN_Back_end.Dto.DtoAuth
 {
     public class LoginForm
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Username cannot be null")]
-        public string Email { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Email or username cannot be null")]
+        public string EmailOrUsername { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password cannot be null")]
         [MinLength(6)]

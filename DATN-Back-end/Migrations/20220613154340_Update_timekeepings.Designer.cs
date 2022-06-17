@@ -3,15 +3,17 @@ using System;
 using DATN_Back_end;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DATN_Back_end.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220613154340_Update_timekeepings")]
+    partial class Update_timekeepings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,7 +102,7 @@ namespace DATN_Back_end.Migrations
                     b.Property<DateTime>("SubmittedTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("UpdatedTime")
+                    b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
@@ -142,7 +144,7 @@ namespace DATN_Back_end.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime?>("UpdatedTime")
+                    b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UploadFileLink")
@@ -201,10 +203,7 @@ namespace DATN_Back_end.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DateOfBirth")
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DepartmentId")
@@ -220,9 +219,6 @@ namespace DATN_Back_end.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<int>("Role")
@@ -241,6 +237,7 @@ namespace DATN_Back_end.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "lethiluuhieu@gmail.com",
                             FirstName = "Admin",
                             LastName = "01",

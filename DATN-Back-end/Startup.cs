@@ -40,6 +40,7 @@ namespace DATN_Back_end
             services.ConfigType<MailConfig>(Configuration);
             services.AddMvc(ConfigMvc).ConfigureJson();
             services.AddHttpContextAccessor();
+            services.AddAuthentication();
 
             services.AddSwaggerGen(c =>
             {
@@ -59,6 +60,7 @@ namespace DATN_Back_end
             services.AddScoped<IForgetPasswordService, ForgetPasswordService>();
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<ISendMailService, SendMailService>();
+            services.AddScoped<ITimeKeepingRepository, TimeKeepingRepository>();
 
             services.ConfigDatabase();
             services.ConfigSecurity();

@@ -14,7 +14,7 @@ namespace DATN_Back_end.Models
 
         public DateTime SubmittedTime { get; set; }
 
-        public DateTime UpdatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
 
         public Guid UserId { get; set; }
         [ForeignKey(nameof(UserId))]

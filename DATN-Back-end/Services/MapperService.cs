@@ -4,6 +4,7 @@ using DATN_Back_end.Dto.DtoDepartment;
 using DATN_Back_end.Dto.DtoFormRequest;
 using DATN_Back_end.Dto.DtoReport;
 using DATN_Back_end.Dto.DtoStatus;
+using DATN_Back_end.Dto.DtoTimeKeeping;
 using DATN_Back_end.Dto.DtoUser;
 using DATN_Back_end.Models;
 using System;
@@ -56,6 +57,10 @@ namespace DATN_Back_end.Services
             cfg.CreateMap<ReportForm, Report>();
             cfg.CreateMap<ReportForm, ReportFormDto>();
             cfg.CreateMap<ReportFormDto, Report>();
+
+            cfg.CreateMap<TimeKeepingForm, Timekeeping>();
+            cfg.CreateMap<Timekeeping, TimeKeepingItem>();
+            cfg.CreateMap<Timekeeping, TimeKeepingDetail>();
         }
 
         public static T ConvertTo<T>(this object source)

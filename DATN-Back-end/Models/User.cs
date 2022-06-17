@@ -12,13 +12,17 @@ namespace DATN_Back_end.Models
 
         public string LastName { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string Email { get; set; }
 
         public string Username { get; set; }
 
         public string Password { get; set; }
+
+        public string? Phone { get; set; }
+
+        public string? Address { get; set; }
 
         public Guid? DepartmentId { get; set; }
         [ForeignKey(nameof(DepartmentId))]

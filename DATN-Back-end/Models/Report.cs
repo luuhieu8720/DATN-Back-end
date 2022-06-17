@@ -8,9 +8,9 @@ namespace DATN_Back_end.Models
     {
         public DateTime CreatedTime { get; set; }
 
-        public DateTime UpdatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
 
-        public string UploadFileLink { get; set; }
+        public string? UploadFileLink { get; set; }
 
         public string Content { get; set; }
 
@@ -19,6 +19,6 @@ namespace DATN_Back_end.Models
 
         public User User { get; set; }
 
-        public List<Comment> Comments { get; set; }
+        public List<Comment>? Comments { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace DATN_Back_end.Services
         Task Forget(string email);
 
         Task Change(ChangePasswordForm changePasswordForm);
+
+        Task Update(UpdatePasswordForm updatePasswordForm);
     }
 }

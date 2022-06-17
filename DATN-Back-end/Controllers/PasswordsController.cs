@@ -22,6 +22,9 @@ namespace DATN_Back_end.Controllers
         public async Task Forget(string email) => await passwordService.Forget(email);
 
         [HttpPost("change")]
-        public async Task Change(ChangePasswordForm changePasswordForm) => await passwordService.Change(changePasswordForm);
+        public async Task Change([FromBody]ChangePasswordForm changePasswordForm) => await passwordService.Change(changePasswordForm);
+
+        [HttpPut("update")]
+        public async Task Update([FromBody] UpdatePasswordForm updatePasswordForm) => await passwordService.Update(updatePasswordForm);
     }
 }

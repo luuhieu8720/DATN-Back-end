@@ -20,6 +20,8 @@ namespace DATN_Back_end.Services
 
         private readonly IUserRepository userRepository;
 
+        private readonly IAuthenticationService authenticationService;
+
         private readonly ISendMailService sendMailService;
 
         private readonly DataContext dataContext;
@@ -30,13 +32,15 @@ namespace DATN_Back_end.Services
             IUserRepository userRepository,
             ISendMailService sendMailService,
             DataContext dataContext,
-            ApplicationConfig passwordConfig)
+            ApplicationConfig passwordConfig,
+            IAuthenticationService authenticationService)
         {
             this.forgetPasswordService = forgetPasswordService;
             this.userRepository = userRepository;
             this.sendMailService = sendMailService;
             this.dataContext = dataContext;
             this.passwordConfig = passwordConfig;
+            this.authenticationService = authenticationService;
         }
 
         public async Task Change(ChangePasswordForm changePasswordForm)
@@ -91,6 +95,25 @@ namespace DATN_Back_end.Services
             };
 
             await sendMailService.Send(mailContent);
+        }
+
+        public async Task Update(UpdatePasswordForm updatePasswordForm)
+        {
+            var userId = authenticationService.CurrentUser.Id;
+            var currentUser = await dataContext.Users.FindAsync(userId);
+
+            if (currentUser.Password != updatePasswordForm.OldPassword.Encrypt())
+                throw new BadRequestException("Old passwords don't match");
+
+            if (updatePasswordForm.Password.CompareTo(updatePasswordForm.ConfirmPassword) != 0)
+            {
+                throw new BadRequestException("New passwords don't match");
+            }
+
+            currentUser.Password = updatePasswordForm.Password.Encrypt();
+            dataContext.Entry(currentUser).State = EntityState.Modified;
+
+            await dataContext.SaveChangesAsync();
         }
     }
 }

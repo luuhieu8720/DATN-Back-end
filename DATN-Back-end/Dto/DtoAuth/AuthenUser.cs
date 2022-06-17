@@ -17,6 +17,7 @@ namespace DATN_Back_end.Dto.DtoAuth
             FirstName = user.FirstName;
             LastName = user.LastName;
             Email = user.Email;
+            Username = user.Username;
         }
 
         public AuthenUser(ClaimsIdentity claimsIdentity, User user)
@@ -24,7 +25,7 @@ namespace DATN_Back_end.Dto.DtoAuth
             Id = Guid.Parse(claimsIdentity.GetClaimValue(ClaimTypes.NameIdentifier));
             FirstName = user.FirstName;
             LastName = user.LastName;
-            Email = claimsIdentity.GetClaimValue(ClaimTypes.Email);
+            Username = user.Username;
         }
 
         public Claim[] GetClaims()
@@ -33,7 +34,8 @@ namespace DATN_Back_end.Dto.DtoAuth
                 new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
                 new Claim(ClaimTypes.Surname, LastName ?? string.Empty),
                 new Claim(ClaimTypes.GivenName, FirstName ?? string.Empty),
-                new Claim(ClaimTypes.Email, Email)
+                new Claim(ClaimTypes.Email, Email),
+                new Claim(ClaimTypes.Upn, Username),
             };
             return claims;
         }

@@ -27,12 +27,12 @@ namespace DATN_Back_end.Controllers
         public async Task<List<ReportItem>> Get() => await reportRepository.Get();
 
         [HttpPost]
-        public async Task Create(ReportForm reportForm) => await reportRepository.Create(reportForm);
+        public async Task Create([FromBody]ReportForm reportForm) => await reportRepository.Create(reportForm);
 
         [HttpGet("{id}")]
         public async Task Get(Guid id) => await reportRepository.Get(id);
 
         [HttpPut("{id}")]
-        public async Task Update(Guid id, ReportForm reportForm) => await reportRepository.Update(id, reportForm);
+        public async Task Update(Guid id, [FromBody]ReportForm reportForm) => await reportRepository.Update(id, reportForm);
     }
 }
