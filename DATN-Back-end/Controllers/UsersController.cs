@@ -13,18 +13,21 @@ namespace DATN_Back_end.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-        private IRepository<User> userRepository;
+        private IRepository<User> repository;
 
-        public UsersController(IRepository<User> userRepository)
+        private IUserRepository userRepository;
+
+        public UsersController(IRepository<User> repository, IUserRepository userRepository)
         {
             this.userRepository = userRepository;
+            this.repository = repository;
         }
 
         [HttpGet]
-        public async Task<List<UserItem>> Get() => await userRepository.Get<UserItem>();
+        public async Task<List<UserItem>> Get() => await repository.Get<UserItem>();
 
         [HttpGet("{id}")]
-        public async Task<UserDetail> Get(Guid id) => await userRepository.Get<UserDetail>(id);
+        public async Task<UserDetail> Get(Guid id) => await repository.Get<UserDetail>(id);
 
         [HttpPost]
         public async Task Create([FromBody] UserFormCreate userForm) => await userRepository.Create(userForm);

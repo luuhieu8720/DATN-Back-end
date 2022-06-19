@@ -21,6 +21,7 @@ namespace DATN_Back_end.Repositories
 
         public async Task<Guid> CheckIn(TimeKeepingForm timeKeepingForm)
         {
+            timeKeepingForm.CheckinTime = DateTime.Parse(timeKeepingForm.CheckinTime.ToString()).ToLocalTime();
             var timeKeeping = timeKeepingForm.ConvertTo<Timekeeping>();
             await dataContext.Timekeepings.AddAsync(timeKeeping);
 
@@ -31,6 +32,10 @@ namespace DATN_Back_end.Repositories
 
         public async Task CheckOut(TimeKeepingForm timeKeepingForm)
         {
+            timeKeepingForm.CheckoutTime = DateTime.Parse(timeKeepingForm.CheckoutTime.ToString()).ToLocalTime();
+
+            timeKeepingForm.CheckinTime = DateTime.Parse(timeKeepingForm.CheckinTime.ToString()).ToLocalTime();
+
             var entry = await dataContext.Timekeepings
                 .Where(x => x.UserId == timeKeepingForm.UserId && 
                 DateTime.Compare(timeKeepingForm.CheckinTime.Value.Date, x.CheckinTime.Value.Date) == 0)
@@ -64,7 +69,8 @@ namespace DATN_Back_end.Repositories
 
             else
             {
-                return entry.ConvertTo<TimeKeepingDetail>();
+                var des = entry.ConvertTo<TimeKeepingDetail>();
+                return des;
             }
         }
     }

@@ -24,6 +24,8 @@ namespace DATN_Back_end.Models
 
         public string? Address { get; set; }
 
+        public string? AvatarUrl { get; set; }
+
         public Guid? DepartmentId { get; set; }
         [ForeignKey(nameof(DepartmentId))]
 

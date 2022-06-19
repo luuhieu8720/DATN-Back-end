@@ -11,6 +11,8 @@ namespace DATN_Back_end.Dto.DtoFormRequest
 
         public string Reason { get; set; }
 
+        public int? Hours { get; set; }
+
         public DateTime SubmittedTime { get; set; }
 
         public DateTime UpdatedTime { get; set; }

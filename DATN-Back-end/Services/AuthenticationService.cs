@@ -50,6 +50,7 @@ namespace DATN_Back_end.Services
                 LastName = authenUser.LastName,
                 Email = authenUser.Email,
                 Username = authenUser.Username,
+                Role = authenUser.Role
             };
         }
     }

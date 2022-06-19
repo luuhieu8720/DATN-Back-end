@@ -33,6 +33,79 @@ namespace DATN_Back_end
                     LastName = "01",
                     Role = Role.Admin
                 });
+
+            modelBuilder.Entity<User>()
+                .HasData(new User()
+                {
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                    Username = "manager",
+                    Email = "luuhieu8720@gmail.com",
+                    Password = "manager123456".Encrypt(),
+                    FirstName = "Manager",
+                    LastName = "01",
+                    Role = Role.Manager
+                });
+
+            modelBuilder.Entity<User>()
+                .HasData(new User()
+                {
+                    Id = Guid.Parse("00000000-0000-0000-0000-000000000003"),
+                    Username = "employee",
+                    Email = "capstone.project.ltlh@gmail.com",
+                    Password = "employee123456".Encrypt(),
+                    FirstName = "Employee",
+                    LastName = "01",
+                    Role = Role.Manager
+                });
+
+            modelBuilder.Entity<FormStatus>()
+                .HasData(new FormStatus()
+                {
+                    Id = 1,
+                    Status = "Pending"
+                });
+
+            modelBuilder.Entity<FormStatus>()
+                .HasData(new FormStatus()
+                {
+                    Id = 2,
+                    Status = "Approved"
+                });
+
+            modelBuilder.Entity<FormStatus>()
+                .HasData(new FormStatus()
+                {
+                    Id = 3,
+                    Status = "Rejected"
+                });
+
+            modelBuilder.Entity<RequestType>()
+                .HasData(new RequestType() 
+                { 
+                    Id = 1,
+                    TypeName = "Off full day"
+                });
+
+            modelBuilder.Entity<RequestType>()
+                .HasData(new RequestType()
+                {
+                    Id = 2,
+                    TypeName = "Off mornig"
+                });
+
+            modelBuilder.Entity<RequestType>()
+                .HasData(new RequestType()
+                {
+                    Id = 3,
+                    TypeName = "Off afternoon"
+                });
+
+            modelBuilder.Entity<RequestType>()
+                .HasData(new RequestType()
+                {
+                    Id = 4,
+                    TypeName = "Off by hour"
+                });
         }
 
         public virtual DbSet<Department> Departments { get; set; }

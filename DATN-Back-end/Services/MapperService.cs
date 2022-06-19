@@ -6,6 +6,7 @@ using DATN_Back_end.Dto.DtoReport;
 using DATN_Back_end.Dto.DtoStatus;
 using DATN_Back_end.Dto.DtoTimeKeeping;
 using DATN_Back_end.Dto.DtoUser;
+using DATN_Back_end.Dto.DtoWorkingTime;
 using DATN_Back_end.Models;
 using System;
 using System.Collections.Generic;
@@ -48,12 +49,16 @@ namespace DATN_Back_end.Services
 
             cfg.CreateMap<Report, ReportItem>()
                 .ForMember(reportItem => reportItem.Comments,
-                option => option.MapFrom(book => book.Comments.Select(x => x.ConvertTo<CommentItem>())));
+                option => option.MapFrom(book => book.Comments.Select(x => x.ConvertTo<CommentItem>())))
+                .ForMember(reportItem => reportItem.User,
+                option => option.MapFrom(book => book.User));
 
             cfg.CreateMap<Report, ReportDetail>()
                 .ForMember(reportItem => reportItem.Comments,
-                option => option.MapFrom(book => book.Comments
-                                                .Select(x => x)));
+                option => option.MapFrom(book => book.Comments.Select(x => x.ConvertTo<CommentItem>())))
+                .ForMember(reportItem => reportItem.User,
+                option => option.MapFrom(book => book.User));
+
             cfg.CreateMap<ReportForm, Report>();
             cfg.CreateMap<ReportForm, ReportFormDto>();
             cfg.CreateMap<ReportFormDto, Report>();

@@ -61,6 +61,7 @@ namespace DATN_Back_end
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<ISendMailService, SendMailService>();
             services.AddScoped<ITimeKeepingRepository, TimeKeepingRepository>();
+            services.AddScoped<IWorkingTimeRepository, WorkingTimeRepository>();
 
             services.ConfigDatabase();
             services.ConfigSecurity();

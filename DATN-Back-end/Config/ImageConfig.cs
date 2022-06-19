@@ -5,16 +5,12 @@ using System.Threading.Tasks;
 
 namespace DATN_Back_end.Config
 {
-    public class CloudinaryConfig
+    public class ImageConfig
     {
-        public string Cloudinary { get; set; }
-
+        public string CloudinaryCloud { get; set; }
         public string ApiKey { get; set; }
-
         public string ApiSecret { get; set; }
-
         public int CoverLimitWidth { get; set; }
-
         public int CoverLimitHeight { get; set; }
     }
 }

@@ -8,6 +8,8 @@ namespace DATN_Back_end.Dto.DtoReport
 {
     public class ReportDetail
     {
+        public Guid Id { get; set; }
+
         public DateTime CreatedTime { get; set; }
 
         public DateTime UpdatedTime { get; set; }
@@ -17,6 +19,8 @@ namespace DATN_Back_end.Dto.DtoReport
         public string Content { get; set; }
 
         public Guid UserId { get; set; }
+
+        public User User { get; set; }
 
         public List<Comment> Comments { get; set; }
     }

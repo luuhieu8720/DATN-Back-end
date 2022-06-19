@@ -9,5 +9,7 @@ namespace DATN_Back_end.Services
     public interface ICloudinaryService
     {
         public Task<string> UploadFile(IFormFile file);
+
+        Task<string> UploadImage(string imageName, byte[] data);
     }
 }

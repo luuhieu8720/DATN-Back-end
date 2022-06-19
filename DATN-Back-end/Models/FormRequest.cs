@@ -16,6 +16,8 @@ namespace DATN_Back_end.Models
 
         public DateTime? UpdatedTime { get; set; }
 
+        public int? Hours { get; set; }
+
         public Guid UserId { get; set; }
         [ForeignKey(nameof(UserId))]
 

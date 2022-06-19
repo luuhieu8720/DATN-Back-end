@@ -12,6 +12,8 @@ namespace DATN_Back_end.Dto.DtoFormRequest
 
         public string Reason { get; set; }
 
+        public int? Hours { get; set; }
+
         public DateTime SubmitedTime { get; set; }
 
         public Guid UserId { get; set; }

@@ -12,8 +12,8 @@ namespace DATN_Back_end.Repositories
 
         Task<ReportDetail> Get(Guid id);
 
-        Task Create(ReportForm reportForm);
+        Task Create(ReportFormDto reportFormDto);
 
-        Task Update(Guid id, ReportForm reportForm);
+        Task Update(Guid id, ReportFormDto reportFormDto);
     }
 }

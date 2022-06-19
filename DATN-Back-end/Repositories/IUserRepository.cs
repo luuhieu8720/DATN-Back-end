@@ -14,5 +14,7 @@ namespace DATN_Back_end.Repositories
         Task Create(UserFormCreate userForm);
 
         Task<User> Get(string email);
+
+        Task Update(Guid id, UserFormUpdate userFormUpdate);
     }
 }

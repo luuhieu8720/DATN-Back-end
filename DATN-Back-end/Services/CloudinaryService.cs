@@ -29,6 +29,19 @@ namespace DATN_Back_end.Services
             cloudinary = new Cloudinary(account);
         }
 
+        public async Task<string> UploadImage(string imageName, byte[] data)
+        {
+            var uploadParams = new ImageUploadParams()
+            {
+                File = new FileDescription(imageName, new MemoryStream(data)),
+                UseFilename = true,
+                UniqueFilename = false
+            };
+
+            cloudinary.Api.Secure = true;
+            var result = await cloudinary.UploadAsync(uploadParams);
+            return result.SecureUrl.ToString();
+        }
         public async Task<string> UploadFile(IFormFile file)
         {
             if (file.Length == 0) throw new BadRequestException("Empty file(s)");

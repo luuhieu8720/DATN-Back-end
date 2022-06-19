@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DATN_Back_end.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,5 +19,7 @@ namespace DATN_Back_end.Dto.DtoAuth
         public string Email { get; set; }
 
         public string Username { get; set; }
+
+        public Role Role { get; set; }
     }
 }
