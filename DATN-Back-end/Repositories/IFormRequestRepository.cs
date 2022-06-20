@@ -1,4 +1,5 @@
-﻿using DATN_Back_end.Dto.DtoFormRequest;
+﻿using DATN_Back_end.Dto.DtoFilter;
+using DATN_Back_end.Dto.DtoFormRequest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,9 @@ namespace DATN_Back_end.Repositories
         Task<FormRequestDetail> Get(Guid id);
 
         Task<List<FormRequestItem>> Get();
+
+        Task<List<FormRequestDetail>> FilterRequest(RequestsFilter requestsFilter);
+
+        Task<List<FormRequestDetail>> FilterRequestForUser(RequestsFilter requestsFilter);
     }
 }

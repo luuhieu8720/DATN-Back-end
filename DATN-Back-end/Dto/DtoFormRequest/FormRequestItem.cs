@@ -18,8 +18,16 @@ namespace DATN_Back_end.Dto.DtoFormRequest
 
         public Guid UserId { get; set; }
 
+        public User User { get; set; }
+
+        public DateTime RequestDate { get; set; }
+
         public int StatusId { get; set; }
 
         public FormStatus FormStatus { get; set; }
+
+        public int RequestTypeId { get; set; }
+
+        public RequestType RequestType { get; set; }
     }
 }

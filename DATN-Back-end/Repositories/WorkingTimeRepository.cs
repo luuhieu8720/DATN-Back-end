@@ -1,4 +1,5 @@
-﻿using DATN_Back_end.Dto.DtoWorkingTime;
+﻿using DATN_Back_end.Dto.DtoFilter;
+using DATN_Back_end.Dto.DtoWorkingTime;
 using DATN_Back_end.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,24 +35,33 @@ namespace DATN_Back_end.Repositories
             return entry.Select(x => new WorkingTimeItem()
             {
                 Time = x.Sum(c => (c.CheckoutTime.Value - c.CheckinTime.Value).TotalHours),
+                PunishedTime = x.Sum(c => c.PunishedTime)
             })
             .ToList();
         }
 
-        public async Task<List<WorkingTimeItem>> GetUserWorkingTimeByMonth(Guid departmentId, DateTime dateTime)
+        public async Task<List<WorkingTimeItem>> FilterUserWorkingTime(WorkingTimeFilter workingTimeFilter)
         {
             var entry = (await dataContext.Timekeepings
                 .Include(x => x.User)
-                .Where(x => x.CheckinTime.Value.Year == dateTime.Year
-                && x.CheckinTime.Value.Month == dateTime.Month
-                && x.User.DepartmentId == departmentId)
+                .Where(x => (workingTimeFilter.DepartmentId.HasValue ? x.User.DepartmentId == workingTimeFilter.DepartmentId.Value
+                : x != null))
+                .Where(x => workingTimeFilter.UserId.HasValue ? x.UserId == workingTimeFilter.UserId.Value
+                : x != null)
+                .Where(x => workingTimeFilter.DateTime.HasValue ?
+                (x.CheckinTime.Value.Month == workingTimeFilter.DateTime.Value.Month
+                 && x.CheckinTime.Value.Year == workingTimeFilter.DateTime.Value.Year)
+                : x != null)
                 .ToListAsync())
                 .GroupBy(x => x.UserId)
                 .Select(x => x)
                 .ToList();
 
             return entry.Select(x => new WorkingTimeItem(){
-                        Time = x.Sum(c => (c.CheckoutTime.Value - c.CheckinTime.Value).TotalHours)})
+                UserId = x.Select(c => c.UserId).FirstOrDefault(),
+                Time = x.Sum(c => (c.CheckoutTime.Value - c.CheckinTime.Value).TotalHours),
+                PunishedTime = x.Sum(c => c.PunishedTime)
+            })
                     .ToList();
         }
 

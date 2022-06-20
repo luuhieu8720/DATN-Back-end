@@ -1,4 +1,5 @@
 ﻿using DATN_Back_end.Config;
+using DATN_Back_end.Dto.DtoFilter;
 using DATN_Back_end.Dto.DtoReport;
 using DATN_Back_end.Exceptions;
 using DATN_Back_end.Extensions;
@@ -21,15 +22,19 @@ namespace DATN_Back_end.Repositories
 
         private readonly ICloudinaryService cloudinaryService;
 
+        private readonly IAuthenticationService authenticationService;
+
         private readonly CloudinaryConfig cloudinaryConfig;
 
         public ReportRepository(DataContext dataContext,
             ICloudinaryService cloudinaryService,
-            CloudinaryConfig cloudinaryConfig) : base(dataContext)
+            CloudinaryConfig cloudinaryConfig,
+            IAuthenticationService authenticationService) : base(dataContext)
         {
             this.dataContext = dataContext;
             this.cloudinaryService = cloudinaryService;
             this.cloudinaryConfig = cloudinaryConfig;
+            this.authenticationService = authenticationService;
         }
 
         public async Task Create(ReportFormDto reportFormDto)
@@ -63,6 +68,46 @@ namespace DATN_Back_end.Repositories
             }
 
             return entry;
+        }
+
+        public async Task<List<ReportItem>> GetReportsByDate(ReportsFilter reportsFilter)
+        {
+            return await dataContext.Reports
+                .Where(x => (reportsFilter.DepartmentId.HasValue ? x.User.DepartmentId == reportsFilter.DepartmentId.Value
+                : x != null))
+                .Where(x => reportsFilter.UserId.HasValue ? x.UserId == reportsFilter.UserId.Value
+                : x != null)
+                .Where(x => reportsFilter.DateTime.HasValue ?
+                (x.CreatedTime.Day == reportsFilter.DateTime.Value.Day
+                 && x.CreatedTime.Month == reportsFilter.DateTime.Value.Month
+                && x.CreatedTime.Year == reportsFilter.DateTime.Value.Year)
+                : x != null)
+                .Select(x => x.ConvertTo<ReportItem>())
+                .ToListAsync();
+        }
+
+        public async Task<ReportDetail> GetReportsByDateForUser(DateTime dateTime)
+        {
+            var currentUserId = authenticationService.CurrentUserId;
+            return await dataContext.Reports
+                .Where(x => x.User.Id == currentUserId
+                    && x.CreatedTime.Day == dateTime.Day
+                    && x.CreatedTime.Month == dateTime.Month
+                    && x.CreatedTime.Year == dateTime.Year)
+                .Include(x => x.Comments)
+                .Select(x => x.ConvertTo<ReportDetail>())
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<ReportItem>> GetReportsByUserId()
+        {
+            var currentUserId = authenticationService.CurrentUserId;
+
+            return await dataContext.Reports
+                .Where(x => x.UserId == currentUserId)
+                .Include(x => x.Comments)
+                .Select(x => x.ConvertTo<ReportItem>())
+                .ToListAsync();
         }
 
         public async Task Update(Guid id, ReportFormDto reportFormDto)

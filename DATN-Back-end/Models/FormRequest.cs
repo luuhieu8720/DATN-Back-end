@@ -27,5 +27,12 @@ namespace DATN_Back_end.Models
         [ForeignKey(nameof(StatusId))]
 
         public FormStatus FormStatus { get; set; }
+
+        public DateTime RequestDate { get; set; }
+
+        public int RequestTypeId { get; set; }
+        [ForeignKey(nameof(RequestTypeId))]
+
+        public RequestType RequestType { get; set; }
     }
 }

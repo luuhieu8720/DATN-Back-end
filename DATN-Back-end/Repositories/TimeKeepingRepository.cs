@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DATN_Back_end.Dto.DtoFilter;
+using DATN_Back_end.Dto.DtoFormRequest;
 using DATN_Back_end.Dto.DtoTimeKeeping;
 using DATN_Back_end.Exceptions;
 using DATN_Back_end.Models;
@@ -22,6 +24,13 @@ namespace DATN_Back_end.Repositories
         public async Task<Guid> CheckIn(TimeKeepingForm timeKeepingForm)
         {
             timeKeepingForm.CheckinTime = DateTime.Parse(timeKeepingForm.CheckinTime.ToString()).ToLocalTime();
+            
+            if (timeKeepingForm.CheckinTime.Value.Hour > 9)
+            {
+                timeKeepingForm.IsPunished = true;
+                timeKeepingForm.PunishedTime += 1;
+            }
+
             var timeKeeping = timeKeepingForm.ConvertTo<Timekeeping>();
             await dataContext.Timekeepings.AddAsync(timeKeeping);
 
@@ -35,6 +44,12 @@ namespace DATN_Back_end.Repositories
             timeKeepingForm.CheckoutTime = DateTime.Parse(timeKeepingForm.CheckoutTime.ToString()).ToLocalTime();
 
             timeKeepingForm.CheckinTime = DateTime.Parse(timeKeepingForm.CheckinTime.ToString()).ToLocalTime();
+
+            if (timeKeepingForm.CheckoutTime.Value.Hour < 18)
+            {
+                timeKeepingForm.IsPunished = true;
+                timeKeepingForm.PunishedTime += 1;
+            }
 
             var entry = await dataContext.Timekeepings
                 .Where(x => x.UserId == timeKeepingForm.UserId && 
@@ -72,6 +87,47 @@ namespace DATN_Back_end.Repositories
                 var des = entry.ConvertTo<TimeKeepingDetail>();
                 return des;
             }
+        }
+
+        public async Task<List<TimeKeepingItem>> FilterTimeKeeping(TimeKeepingFilter timeKeepingFilter)
+        {
+            return (await dataContext.Timekeepings
+                .Include(x => x.User)
+                .Where(x => (timeKeepingFilter.DepartmentId.HasValue ? x.User.DepartmentId == timeKeepingFilter.DepartmentId.Value
+                : x != null))
+                .Where(x => timeKeepingFilter.UserId.HasValue ? x.UserId == timeKeepingFilter.UserId.Value
+                : x != null)
+                .Where(x => timeKeepingFilter.DateTime.HasValue ?
+                (x.CheckinTime.Value.Month == timeKeepingFilter.DateTime.Value.Month
+                 && x.CheckinTime.Value.Year == timeKeepingFilter.DateTime.Value.Year)
+                : x != null)
+                .Select(x => x.ConvertTo<TimeKeepingItem>())
+                .ToListAsync());
+        }
+
+        public async Task DeletePunish(Guid id, FormRequestForm formRequestForm)
+        {
+            var entry = await dataContext.FormRequests.FindAsync(id) ??
+                throw new NotFoundException("This request cannot be found");
+
+            var timekeeping = await dataContext.Timekeepings
+                .Where(x => x.UserId == formRequestForm.UserId
+                && x.CheckinTime.Value.Day == formRequestForm.RequestDate.Day
+                && x.CheckinTime.Value.Month == formRequestForm.RequestDate.Month
+                && x.CheckinTime.Value.Year == formRequestForm.RequestDate.Year)
+                .FirstOrDefaultAsync();
+
+            if (timekeeping.PunishedTime < 1 && formRequestForm.RequestTypeId != 5)
+            {
+                throw new BadRequestException("This user didnt be punished this day");
+            }
+
+            if (formRequestForm.StatusId == 2 && formRequestForm.RequestTypeId == 5)
+            {
+                timekeeping.PunishedTime = timekeeping.PunishedTime - 1;
+            }
+
+            await base.Update(timekeeping.Id, timekeeping);
         }
     }
 }

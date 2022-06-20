@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DATN_Back_end.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,8 +18,12 @@ namespace DATN_Back_end.Dto.DtoFormRequest
 
         public DateTime UpdatedTime { get; set; }
 
+        public DateTime RequestDate { get; set; }
+
         public Guid UserId { get; set; }
 
         public int StatusId { get; set; }
+
+        public int RequestTypeId { get; set; }
     }
 }

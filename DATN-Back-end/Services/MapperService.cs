@@ -34,8 +34,18 @@ namespace DATN_Back_end.Services
                 option => option.MapFrom(department => department.Manager.ConvertTo<UserDetail>()));
             cfg.CreateMap<DepartmentForm, Department>();
 
-            cfg.CreateMap<FormRequest, FormRequestItem>();
-            cfg.CreateMap<FormRequest, FormRequestDetail>();
+            cfg.CreateMap<FormRequest, FormRequestItem>()
+                .ForMember(request => request.User,
+                option => option.MapFrom(request => request.User))
+                .ForMember(request => request.RequestType,
+                option => option.MapFrom(request => request.RequestType));
+
+            cfg.CreateMap<FormRequest, FormRequestDetail>()
+                .ForMember(request => request.User,
+                option => option.MapFrom(request => request.User))
+                .ForMember(request => request.RequestType,
+                option => option.MapFrom(request => request.RequestType));
+
             cfg.CreateMap<FormRequestForm, FormRequest>();
 
             cfg.CreateMap<FormStatus, FormStatusDetail>();
@@ -64,8 +74,12 @@ namespace DATN_Back_end.Services
             cfg.CreateMap<ReportFormDto, Report>();
 
             cfg.CreateMap<TimeKeepingForm, Timekeeping>();
-            cfg.CreateMap<Timekeeping, TimeKeepingItem>();
-            cfg.CreateMap<Timekeeping, TimeKeepingDetail>();
+            cfg.CreateMap<Timekeeping, TimeKeepingItem>()
+                .ForMember(timekeeping => timekeeping.User,
+                option => option.MapFrom(timekeeping => timekeeping.User));
+            cfg.CreateMap<Timekeeping, TimeKeepingDetail>()
+                .ForMember(timekeeping => timekeeping.User,
+                option => option.MapFrom(timekeeping => timekeeping.User));
         }
 
         public static T ConvertTo<T>(this object source)

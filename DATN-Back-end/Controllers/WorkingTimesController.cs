@@ -1,4 +1,5 @@
-﻿using DATN_Back_end.Dto.DtoWorkingTime;
+﻿using DATN_Back_end.Dto.DtoFilter;
+using DATN_Back_end.Dto.DtoWorkingTime;
 using DATN_Back_end.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,9 +19,9 @@ namespace DATN_Back_end.Controllers
             this.workingTimeRepository = workingTimeRepository;
         }
 
-        [HttpGet("{departmentId}")]
-        public async Task<List<WorkingTimeItem>> GetUserWorkingTimeByMonth(Guid departmentId, DateTime dateTime)
-            => await workingTimeRepository.GetUserWorkingTimeByMonth(departmentId, dateTime);
+        [HttpPost("filter")]
+        public async Task<List<WorkingTimeItem>> FIlterFilterUserWorkingTime([FromBody]WorkingTimeFilter workingTimeFilter)
+            => await workingTimeRepository.FilterUserWorkingTime(workingTimeFilter);
 
         [HttpGet("all")]
         public async Task<List<WorkingTimeItem>> GetAllUserWorkingTime(DateTime dateTime)

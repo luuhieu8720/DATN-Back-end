@@ -13,5 +13,7 @@ namespace DATN_Back_end.Dto.DtoWorkingTime
         public Guid UserId { get; set; }
 
         public User User { get; set; }
+
+        public int PunishedTime { get; set; }
     }
 }

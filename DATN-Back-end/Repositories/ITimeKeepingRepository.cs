@@ -1,4 +1,6 @@
-﻿using DATN_Back_end.Dto.DtoTimeKeeping;
+﻿using DATN_Back_end.Dto.DtoFilter;
+using DATN_Back_end.Dto.DtoFormRequest;
+using DATN_Back_end.Dto.DtoTimeKeeping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +17,9 @@ namespace DATN_Back_end.Repositories
         Task<TimeKeepingDetail> ValidateCheckinToday(Guid userId);
 
         Task CheckOut(TimeKeepingForm timeKeepingForm);
+
+        Task<List<TimeKeepingItem>> FilterTimeKeeping(TimeKeepingFilter timeKeepingFilter);
+
+        Task DeletePunish(Guid id, FormRequestForm formRequestForm);
     }
 }

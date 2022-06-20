@@ -12,6 +12,10 @@ namespace DATN_Back_end.Models
 
         public DateTime? CheckoutTime { get; set; }
 
+        public bool IsPunished { get; set; }
+
+        public int PunishedTime { get; set; }
+
         public Guid UserId { get; set; }
         [ForeignKey(nameof(UserId))]
 

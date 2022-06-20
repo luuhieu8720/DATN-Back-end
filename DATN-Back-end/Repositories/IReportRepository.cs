@@ -1,4 +1,5 @@
-﻿using DATN_Back_end.Dto.DtoReport;
+﻿using DATN_Back_end.Dto.DtoFilter;
+using DATN_Back_end.Dto.DtoReport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,11 @@ namespace DATN_Back_end.Repositories
         Task Create(ReportFormDto reportFormDto);
 
         Task Update(Guid id, ReportFormDto reportFormDto);
+
+        Task<List<ReportItem>> GetReportsByUserId();
+
+        Task<ReportDetail> GetReportsByDateForUser(DateTime dateTime);
+
+        Task<List<ReportItem>> GetReportsByDate(ReportsFilter reportsFilter);
     }
 }

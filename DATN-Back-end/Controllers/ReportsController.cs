@@ -1,6 +1,8 @@
-﻿using DATN_Back_end.Dto.DtoReport;
+﻿using DATN_Back_end.Dto.DtoFilter;
+using DATN_Back_end.Dto.DtoReport;
 using DATN_Back_end.Models;
 using DATN_Back_end.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -23,15 +25,27 @@ namespace DATN_Back_end.Controllers
             this.repository = repository;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<List<ReportItem>> Get() => await reportRepository.Get();
 
+        [Authorize]
         [HttpPost]
-        public async Task Create([FromBody]ReportFormDto reportFormDto) => await reportRepository.Create(reportFormDto);
+        public async Task Create([FromBody] ReportFormDto reportFormDto) => await reportRepository.Create(reportFormDto);
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ReportDetail> Get(Guid id) => await reportRepository.Get(id);
 
+        [Authorize]
+        [HttpGet("user/all")]
+        public async Task<List<ReportItem>> GetReportsByUserId() => await reportRepository.GetReportsByUserId();
+
+        [Authorize]
+        [HttpPost("filter/all")]
+        public async Task<List<ReportItem>> GetReportsByDate([FromBody]ReportsFilter reportsFilter) => await reportRepository.GetReportsByDate(reportsFilter);
+
+        [Authorize]
         [HttpPut("{id}")]
         public async Task Update(Guid id, [FromBody]ReportFormDto reportFormDto) => await reportRepository.Update(id, reportFormDto);
     }

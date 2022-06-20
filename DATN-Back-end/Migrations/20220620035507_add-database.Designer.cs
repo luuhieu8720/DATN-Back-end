@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DATN_Back_end.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220601123242_Update ForgetPassword model")]
-    partial class UpdateForgetPasswordmodel
+    [Migration("20220620035507_add-database")]
+    partial class adddatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -93,8 +93,17 @@ namespace DATN_Back_end.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("text");
 
+                    b.Property<int?>("Hours")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Reason")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("RequestTypeId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("StatusId")
                         .HasColumnType("integer");
@@ -102,13 +111,15 @@ namespace DATN_Back_end.Migrations
                     b.Property<DateTime>("SubmittedTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTime")
+                    b.Property<DateTime?>("UpdatedTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RequestTypeId");
 
                     b.HasIndex("StatusId");
 
@@ -130,6 +141,23 @@ namespace DATN_Back_end.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FormStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Status = "Pending"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Status = "Approved"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Status = "Rejected"
+                        });
                 });
 
             modelBuilder.Entity("DATN_Back_end.Models.Report", b =>
@@ -144,7 +172,7 @@ namespace DATN_Back_end.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTime")
+                    b.Property<DateTime?>("UpdatedTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UploadFileLink")
@@ -173,6 +201,28 @@ namespace DATN_Back_end.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RequestTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            TypeName = "Off full day"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            TypeName = "Off mornig"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            TypeName = "Off afternoon"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            TypeName = "Off by hour"
+                        });
                 });
 
             modelBuilder.Entity("DATN_Back_end.Models.Timekeeping", b =>
@@ -181,11 +231,17 @@ namespace DATN_Back_end.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CheckinTime")
+                    b.Property<DateTime?>("CheckinTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("CheckoutTime")
+                    b.Property<DateTime?>("CheckoutTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsPunished")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("PunishedTime")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -203,7 +259,13 @@ namespace DATN_Back_end.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DepartmentId")
@@ -219,6 +281,9 @@ namespace DATN_Back_end.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<int>("Role")
@@ -237,13 +302,32 @@ namespace DATN_Back_end.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            DateOfBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "lethiluuhieu@gmail.com",
                             FirstName = "Admin",
                             LastName = "01",
                             Password = "3e9b3a802f5a25bb4c4956a896b0dc84",
                             Role = 3,
                             Username = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            Email = "luuhieu8720@gmail.com",
+                            FirstName = "Manager",
+                            LastName = "01",
+                            Password = "6f6e5bee90e6e2ac7b9dbf5e415422a4",
+                            Role = 2,
+                            Username = "manager"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Email = "capstone.project.ltlh@gmail.com",
+                            FirstName = "Employee",
+                            LastName = "01",
+                            Password = "a626a7ab3c86b67938a313fc8c862ea3",
+                            Role = 2,
+                            Username = "employee"
                         });
                 });
 
@@ -282,6 +366,12 @@ namespace DATN_Back_end.Migrations
 
             modelBuilder.Entity("DATN_Back_end.Models.FormRequest", b =>
                 {
+                    b.HasOne("DATN_Back_end.Models.RequestType", "RequestType")
+                        .WithMany()
+                        .HasForeignKey("RequestTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DATN_Back_end.Models.FormStatus", "FormStatus")
                         .WithMany()
                         .HasForeignKey("StatusId")
@@ -295,6 +385,8 @@ namespace DATN_Back_end.Migrations
                         .IsRequired();
 
                     b.Navigation("FormStatus");
+
+                    b.Navigation("RequestType");
 
                     b.Navigation("User");
                 });
