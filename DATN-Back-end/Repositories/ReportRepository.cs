@@ -73,6 +73,7 @@ namespace DATN_Back_end.Repositories
 
         public async Task<List<ReportItem>> GetReportsByDate(ReportsFilter reportsFilter)
         {
+            reportsFilter.DateTime = DateTime.Parse(reportsFilter.DateTime.ToString()).ToLocalTime();
             var test = await dataContext.Reports
                 .Include(x => x.User).ToListAsync();
 

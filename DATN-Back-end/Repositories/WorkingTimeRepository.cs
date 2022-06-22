@@ -24,9 +24,9 @@ namespace DATN_Back_end.Repositories
         public async Task<List<WorkingTimeItem>> GetAllUserWorkingTime(DateTime dateTime)
         {
             var entry = (await dataContext.Timekeepings
+                .Include(x => x.User)
                 .Where(x => x.CheckinTime.Value.Year == dateTime.Year
                 && x.CheckinTime.Value.Month == dateTime.Month)
-                .Include(x => x.User)
                 .ToListAsync())
                 .GroupBy(x => x.UserId)
                 .Select(x => x)
@@ -35,7 +35,9 @@ namespace DATN_Back_end.Repositories
             return entry.Select(x => new WorkingTimeItem()
             {
                 Time = x.Sum(c => (c.CheckoutTime.Value - c.CheckinTime.Value).TotalHours),
-                PunishedTime = x.Sum(c => c.PunishedTime)
+                PunishedTime = x.Sum(c => c.PunishedTime),
+                UserId = x.Select(c => c.UserId).FirstOrDefault(),
+                User = x.Select(c => c.User).FirstOrDefault()
             })
             .ToList();
         }
@@ -61,7 +63,8 @@ namespace DATN_Back_end.Repositories
                     {
                         UserId = x.Select(c => c.UserId).FirstOrDefault(),
                         Time = x.Sum(c => c.CheckoutTime.HasValue ? (c.CheckoutTime.Value - c.CheckinTime.Value).TotalHours : 0),
-                        PunishedTime = x.Sum(c => c.PunishedTime)
+                        PunishedTime = x.Sum(c => c.PunishedTime),
+                        User = x.Select(c => c.User).FirstOrDefault()
                     })
                     .ToList();
         }
