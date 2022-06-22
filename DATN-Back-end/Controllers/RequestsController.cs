@@ -16,9 +16,13 @@ namespace DATN_Back_end.Controllers
     {
         private IFormRequestRepository formRequestRepository;
 
-        public RequestsController(IFormRequestRepository formRequestRepository)
+        private IRepository<FormRequest> repository;
+
+        public RequestsController(IFormRequestRepository formRequestRepository,
+            IRepository<FormRequest> repository)
         {
             this.formRequestRepository = formRequestRepository;
+            this.repository = repository;
         }
 
         [Authorize]
@@ -43,6 +47,10 @@ namespace DATN_Back_end.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task Update(Guid id, [FromBody] FormRequestForm requestForm) => await formRequestRepository.Update(id, requestForm); 
+        public async Task Update(Guid id, [FromBody] FormRequestForm requestForm) => await formRequestRepository.Update(id, requestForm);
+
+        [Authorize(Roles = "Admin, Manager")]
+        [HttpPut("comfirm/{id}")]
+        public async Task ConfirmRequest(Guid id, [FromBody] FormRequestConfirm formRequestConfirm) => await formRequestRepository.ConfirmRequest(id, formRequestConfirm);
     }
 }

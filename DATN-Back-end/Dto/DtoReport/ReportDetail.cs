@@ -12,7 +12,7 @@ namespace DATN_Back_end.Dto.DtoReport
 
         public DateTime CreatedTime { get; set; }
 
-        public DateTime UpdatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
 
         public string UploadFileLink { get; set; }
 

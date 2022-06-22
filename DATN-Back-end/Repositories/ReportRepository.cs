@@ -59,6 +59,7 @@ namespace DATN_Back_end.Repositories
             var entry = await dataContext.Reports
                 .Include(x => x.Comments)
                 .Include(x => x.User)
+                .Where(x => x.Id == id)
                 .Select(x => x.ConvertTo<ReportDetail>())
                 .FirstOrDefaultAsync();
 
@@ -72,18 +73,25 @@ namespace DATN_Back_end.Repositories
 
         public async Task<List<ReportItem>> GetReportsByDate(ReportsFilter reportsFilter)
         {
-            return await dataContext.Reports
+            var test = await dataContext.Reports
+                .Include(x => x.User).ToListAsync();
+
+            var res = await dataContext.Reports
+                .Include(x => x.User)
+                .Include(x => x.Comments)
                 .Where(x => (reportsFilter.DepartmentId.HasValue ? x.User.DepartmentId == reportsFilter.DepartmentId.Value
                 : x != null))
                 .Where(x => reportsFilter.UserId.HasValue ? x.UserId == reportsFilter.UserId.Value
                 : x != null)
                 .Where(x => reportsFilter.DateTime.HasValue ?
                 (x.CreatedTime.Day == reportsFilter.DateTime.Value.Day
-                 && x.CreatedTime.Month == reportsFilter.DateTime.Value.Month
+                && x.CreatedTime.Month == reportsFilter.DateTime.Value.Month
                 && x.CreatedTime.Year == reportsFilter.DateTime.Value.Year)
                 : x != null)
                 .Select(x => x.ConvertTo<ReportItem>())
                 .ToListAsync();
+
+            return res;
         }
 
         public async Task<ReportDetail> GetReportsByDateForUser(DateTime dateTime)
@@ -95,6 +103,7 @@ namespace DATN_Back_end.Repositories
                     && x.CreatedTime.Month == dateTime.Month
                     && x.CreatedTime.Year == dateTime.Year)
                 .Include(x => x.Comments)
+                .Include(x => x.User)
                 .Select(x => x.ConvertTo<ReportDetail>())
                 .FirstOrDefaultAsync();
         }
@@ -106,6 +115,7 @@ namespace DATN_Back_end.Repositories
             return await dataContext.Reports
                 .Where(x => x.UserId == currentUserId)
                 .Include(x => x.Comments)
+                .Include(x => x.User)
                 .Select(x => x.ConvertTo<ReportItem>())
                 .ToListAsync();
         }

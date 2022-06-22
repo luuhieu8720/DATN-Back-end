@@ -1,6 +1,7 @@
 ﻿using DATN_Back_end.Dto.DtoUser;
 using DATN_Back_end.Models;
 using DATN_Back_end.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,14 +24,23 @@ namespace DATN_Back_end.Controllers
             this.repository = repository;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<List<UserItem>> Get() => await repository.Get<UserItem>();
+        public async Task<List<UserItem>> Get() => await userRepository.GetAll();
+
+        [HttpGet("manager")]
+        public async Task<List<UserItem>> GetUserByDepartment(Guid id) => await userRepository.GetUserByDepartmentId(id);
 
         [HttpGet("{id}")]
         public async Task<UserDetail> Get(Guid id) => await repository.Get<UserDetail>(id);
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task Create([FromBody] UserFormCreate userForm) => await userRepository.Create(userForm);
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task Delete(Guid id) => await repository.Delete(id);
 
         [HttpPut("{id}")]
         public async Task Update(Guid id, [FromBody] UserFormUpdate userForm) => await userRepository.Update(id, userForm);

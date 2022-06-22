@@ -1,4 +1,5 @@
-﻿using DATN_Back_end.Models;
+﻿using DATN_Back_end.Dto.DtoComment;
+using DATN_Back_end.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,11 @@ namespace DATN_Back_end.Repositories
             this.dataContext = dataContext;
         }
 
+        public async Task Create(CommentForm commentForm)
+        {
+            commentForm.CommentedTime = DateTime.Now;
 
+            await base.Create(commentForm);
+        }
     }
 }

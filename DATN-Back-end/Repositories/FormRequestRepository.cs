@@ -42,6 +42,7 @@ namespace DATN_Back_end.Repositories
                 .Where(x => requestsFilter.FormStatusId.HasValue ? x.FormStatus.Id == requestsFilter.FormStatusId.Value
                 : x != null)
                 .Include(x => x.FormStatus)
+                .Include(x => x.RequestType)
                 .Select(x => x.ConvertTo<FormRequestDetail>())
                 .ToListAsync();
         }
@@ -50,6 +51,7 @@ namespace DATN_Back_end.Repositories
         {
             var entry = await dataContext.FormRequests
                 .Include(x => x.FormStatus)
+                .Include(x => x.RequestType)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -90,8 +92,42 @@ namespace DATN_Back_end.Repositories
                 .Where(x => requestsFilter.FormStatusId.HasValue ? x.FormStatus.Id == requestsFilter.FormStatusId.Value
                 : x != null)
                 .Include(x => x.FormStatus)
+                .Include(x => x.RequestType)
                 .Select(x => x.ConvertTo<FormRequestDetail>())
                 .ToListAsync();
+        }
+
+        public async Task ConfirmRequest(Guid id, FormRequestConfirm formRequestConfirm)
+        {
+            var entry = await dataContext.FormRequests.FindAsync(id) ??
+                throw new NotFoundException("This request cannot be found");
+
+            var timekeeping = await dataContext.Timekeepings
+                .Where(x => x.UserId == entry.UserId
+                && x.CheckinTime.Value.Day == entry.RequestDate.Day
+                && x.CheckinTime.Value.Month == entry.RequestDate.Month
+                && x.CheckinTime.Value.Year == entry.RequestDate.Year)
+                .FirstOrDefaultAsync();
+
+            if (timekeeping.PunishedTime < 1 && entry.RequestTypeId != 5)
+            {
+                throw new BadRequestException("This user didnt be punished this day");
+            }
+
+            if (formRequestConfirm.StatusId == 2 && timekeeping.PunishedTime != 0)
+            {
+                timekeeping.PunishedTime = timekeeping.PunishedTime - 1;
+            }
+
+            var entryTimeKeeping = await dataContext.Timekeepings.FindAsync(timekeeping.Id);
+            timekeeping.CopyTo(entryTimeKeeping);
+            dataContext.Entry(entry).State = EntityState.Modified;
+
+            await dataContext.SaveChangesAsync();
+
+            await base.Update(id, formRequestConfirm);
+
+
         }
     }
 }

@@ -12,5 +12,7 @@ namespace DATN_Back_end.Dto.DtoComment
         public string Content { get; set; }
 
         public DateTime CommentedTime { get; set; }
+
+        public Guid UserId { get; set; }
     }
 }

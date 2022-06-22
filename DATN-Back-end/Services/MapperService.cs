@@ -22,16 +22,21 @@ namespace DATN_Back_end.Services
 
         private static void CreateMap(IMapperConfigurationExpression cfg)
         {
-            cfg.CreateMap<User, UserItem>();
+            cfg.CreateMap<User, UserItem>()
+                .ForMember(user => user.Department,
+                option => option.MapFrom(user => user.Department.ConvertTo<DepartmentShorted>()));
             cfg.CreateMap<User, UserDetail>();
+            cfg.CreateMap<User, UserShorted>();
             cfg.CreateMap<UserDetail, User>();
             cfg.CreateMap<UserFormCreate, User>();
             cfg.CreateMap<UserFormUpdate, User>();
 
             cfg.CreateMap<Department, DepartmentDetail>();
+            cfg.CreateMap<DepartmentShorted, Department>();
+            cfg.CreateMap<Department, DepartmentShorted>();
             cfg.CreateMap<Department, DepartmentItem>()
                 .ForMember(departmentItem => departmentItem.Manager,
-                option => option.MapFrom(department => department.Manager.ConvertTo<UserDetail>()));
+                option => option.MapFrom(department => department.Manager.ConvertTo<UserShorted>()));
             cfg.CreateMap<DepartmentForm, Department>();
 
             cfg.CreateMap<FormRequest, FormRequestItem>()
@@ -47,14 +52,19 @@ namespace DATN_Back_end.Services
                 option => option.MapFrom(request => request.RequestType));
 
             cfg.CreateMap<FormRequestForm, FormRequest>();
+            cfg.CreateMap<FormRequestConfirm, FormRequest>();
 
             cfg.CreateMap<FormStatus, FormStatusDetail>();
             cfg.CreateMap<FormStatus, FormStatusItem>();
             cfg.CreateMap<FormStatusForm, FormStatus>();
 
             cfg.CreateMap<CommentForm, Comment>();
-            cfg.CreateMap<Comment, CommentDetail>();
-            cfg.CreateMap<Comment, CommentItem>();
+            cfg.CreateMap<Comment, CommentDetail>()
+                .ForMember(comment => comment.CommentedUser,
+                option => option.MapFrom(comment => comment.CommentedUser));
+            cfg.CreateMap<Comment, CommentItem>()
+                .ForMember(comment => comment.CommentedUser,
+                option => option.MapFrom(comment => comment.CommentedUser));
             cfg.CreateMap<CommentItem, Comment>();
 
             cfg.CreateMap<Report, ReportItem>()

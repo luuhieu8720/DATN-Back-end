@@ -8,13 +8,14 @@ namespace DATN_Back_end.Dto.DtoFormRequest
 {
     public class FormRequestDetail
     {
+        public Guid Id { get; set; }
         public string Content { get; set; }
 
         public string Reason { get; set; }
 
         public int? Hours { get; set; }
 
-        public DateTime SubmitedTime { get; set; }
+        public DateTime SubmittedTime { get; set; }
 
         public Guid UserId { get; set; }
 
@@ -25,7 +26,7 @@ namespace DATN_Back_end.Dto.DtoFormRequest
         public int StatusId { get; set; }
 
         public FormStatus FormStatus { get; set; }
-        public Guid RequestTypeId { get; set; }
+        public int RequestTypeId { get; set; }
 
         public RequestType RequestType { get; set; }
     }

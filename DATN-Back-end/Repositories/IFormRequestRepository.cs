@@ -20,5 +20,7 @@ namespace DATN_Back_end.Repositories
         Task<List<FormRequestDetail>> FilterRequest(RequestsFilter requestsFilter);
 
         Task<List<FormRequestDetail>> FilterRequestForUser(RequestsFilter requestsFilter);
+
+        Task ConfirmRequest(Guid id, FormRequestConfirm formRequestConfirm);
     }
 }

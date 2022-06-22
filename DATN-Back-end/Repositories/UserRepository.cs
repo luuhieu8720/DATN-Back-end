@@ -10,6 +10,7 @@ using DATN_Back_end.Config;
 using System.IO;
 using System.Drawing;
 using DATN_Back_end.Services;
+using System.Collections.Generic;
 
 namespace DATN_Back_end.Repositories
 {
@@ -83,6 +84,23 @@ namespace DATN_Back_end.Repositories
             var uploadResult = await cloudinaryService.UploadImage(imageName, dataUpload);
 
             return uploadResult;
+        }
+
+        public async Task<List<UserItem>> GetAll()
+        {
+            return await dataContext.Users
+                .Include(x => x.Department)
+                .Select(x => x.ConvertTo<UserItem>())
+                .ToListAsync();
+        }
+
+        public async Task<List<UserItem>> GetUserByDepartmentId(Guid id)
+        {
+            return await dataContext.Users
+                .Include(x => x.Department)
+                .Where(x => x.DepartmentId == id)
+                .Select(x => x.ConvertTo<UserItem>())
+                .ToListAsync();
         }
     }
 }

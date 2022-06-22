@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using DATN_Back_end.Dto.DtoFilter;
@@ -41,20 +42,24 @@ namespace DATN_Back_end.Repositories
 
         public async Task CheckOut(TimeKeepingForm timeKeepingForm)
         {
+            var entry = await dataContext.Timekeepings
+                .Where(x => x.UserId == timeKeepingForm.UserId &&
+                DateTime.Compare(timeKeepingForm.CheckinTime.Value.Date, x.CheckinTime.Value.Date) == 0)
+                .FirstOrDefaultAsync();
+
             timeKeepingForm.CheckoutTime = DateTime.Parse(timeKeepingForm.CheckoutTime.ToString()).ToLocalTime();
 
             timeKeepingForm.CheckinTime = DateTime.Parse(timeKeepingForm.CheckinTime.ToString()).ToLocalTime();
+            
+            var checkAmOrPm = timeKeepingForm.CheckoutTime.Value.ToString("tt", CultureInfo.InvariantCulture);
 
-            if (timeKeepingForm.CheckoutTime.Value.Hour < 18)
+            if (timeKeepingForm.CheckoutTime.Value.Hour < 18 && checkAmOrPm == "PM"
+                || checkAmOrPm == "AM")
             {
                 timeKeepingForm.IsPunished = true;
-                timeKeepingForm.PunishedTime += 1;
+                timeKeepingForm.PunishedTime = entry.PunishedTime;
+                timeKeepingForm.PunishedTime++;
             }
-
-            var entry = await dataContext.Timekeepings
-                .Where(x => x.UserId == timeKeepingForm.UserId && 
-                DateTime.Compare(timeKeepingForm.CheckinTime.Value.Date, x.CheckinTime.Value.Date) == 0)
-                .FirstOrDefaultAsync();
 
             timeKeepingForm.CopyTo(entry);
 

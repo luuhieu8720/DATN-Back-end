@@ -16,5 +16,9 @@ namespace DATN_Back_end.Repositories
         Task<User> Get(string email);
 
         Task Update(Guid id, UserFormUpdate userFormUpdate);
+
+        Task<List<UserItem>> GetAll();
+
+        Task<List<UserItem>> GetUserByDepartmentId(Guid id);
     }
 }

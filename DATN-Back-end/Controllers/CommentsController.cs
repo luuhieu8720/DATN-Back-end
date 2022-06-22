@@ -24,7 +24,7 @@ namespace DATN_Back_end.Controllers
         }
 
         [HttpPost]
-        public async Task Create([FromBody] CommentForm commentForm) => await repository.Create(commentForm);
+        public async Task Create([FromBody] CommentForm commentForm) => await commentRepository.Create(commentForm);
 
         [HttpGet]
         public async Task<List<CommentItem>> Get() => await repository.Get<CommentItem>();

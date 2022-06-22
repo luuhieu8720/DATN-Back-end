@@ -57,11 +57,12 @@ namespace DATN_Back_end.Repositories
                 .Select(x => x)
                 .ToList();
 
-            return entry.Select(x => new WorkingTimeItem(){
-                UserId = x.Select(c => c.UserId).FirstOrDefault(),
-                Time = x.Sum(c => (c.CheckoutTime.Value - c.CheckinTime.Value).TotalHours),
-                PunishedTime = x.Sum(c => c.PunishedTime)
-            })
+            return entry.Select(x => new WorkingTimeItem()
+                    {
+                        UserId = x.Select(c => c.UserId).FirstOrDefault(),
+                        Time = x.Sum(c => c.CheckoutTime.HasValue ? (c.CheckoutTime.Value - c.CheckinTime.Value).TotalHours : 0),
+                        PunishedTime = x.Sum(c => c.PunishedTime)
+                    })
                     .ToList();
         }
 
