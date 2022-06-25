@@ -12,8 +12,8 @@ namespace DATN_Back_end.Dto.DtoDepartment
 
         public string Name { get; set; }
 
-        public Guid ManagerId { get; set; }
+        public Guid? ManagerId { get; set; }
 
-        public UserDetail Manager { get; set; }
+        public UserDetail? Manager { get; set; }
     }
 }

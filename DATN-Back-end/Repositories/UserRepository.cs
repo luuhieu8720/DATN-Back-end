@@ -11,6 +11,7 @@ using System.IO;
 using System.Drawing;
 using DATN_Back_end.Services;
 using System.Collections.Generic;
+using DATN_Back_end.Exceptions;
 
 namespace DATN_Back_end.Repositories
 {
@@ -33,6 +34,24 @@ namespace DATN_Back_end.Repositories
         public async Task Create(UserFormCreate userForm)
         {
             userForm.Password = userForm.Password.Encrypt();
+
+            var entry = await dataContext.Departments
+                .Where(x => userForm.DepartmentId.HasValue ? x.Id == userForm.DepartmentId.Value : x == null)
+                .FirstOrDefaultAsync();
+
+            if (entry != null)
+            {
+                if (userForm.Role == Role.Manager && entry.ManagerId.HasValue)
+                {
+                    throw new BadRequestException("This department already have a manager");
+                }
+            }
+
+            if (userForm.Role == Role.Manager && 
+                (userForm.DepartmentId.ToString() == "" || userForm.DepartmentId == null))
+            {
+                throw new BadRequestException("Manager must be placed in at least 1 department");
+            }
 
             await base.Create(userForm);
         }

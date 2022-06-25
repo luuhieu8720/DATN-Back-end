@@ -43,6 +43,7 @@ namespace DATN_Back_end.Repositories
                 : x != null)
                 .Include(x => x.FormStatus)
                 .Include(x => x.RequestType)
+                .Include(x => x.User)
                 .Select(x => x.ConvertTo<FormRequestDetail>())
                 .ToListAsync();
         }
@@ -52,6 +53,7 @@ namespace DATN_Back_end.Repositories
             var entry = await dataContext.FormRequests
                 .Include(x => x.FormStatus)
                 .Include(x => x.RequestType)
+                .Include(x => x.User)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -93,6 +95,7 @@ namespace DATN_Back_end.Repositories
                 : x != null)
                 .Include(x => x.FormStatus)
                 .Include(x => x.RequestType)
+                .Include(x => x.User)
                 .Select(x => x.ConvertTo<FormRequestDetail>())
                 .ToListAsync();
         }

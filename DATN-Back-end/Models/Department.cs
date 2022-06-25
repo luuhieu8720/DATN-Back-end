@@ -10,9 +10,9 @@ namespace DATN_Back_end.Models
     {
         public string Name { get; set; }
 
-        public Guid ManagerId { get; set; }
+        public Guid? ManagerId { get; set; }
         [ForeignKey(nameof(ManagerId))]
 
-        public User Manager { get; set; }
+        public User? Manager { get; set; }
     }
 }
