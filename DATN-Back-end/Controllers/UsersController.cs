@@ -32,7 +32,7 @@ namespace DATN_Back_end.Controllers
         public async Task<List<UserItem>> GetUserByDepartment(Guid id) => await userRepository.GetUserByDepartmentId(id);
 
         [HttpGet("{id}")]
-        public async Task<UserDetail> Get(Guid id) => await repository.Get<UserDetail>(id);
+        public async Task<UserDetail> Get(Guid id) => await userRepository.Get(id);
 
         [Authorize(Roles = "Admin")]
         [HttpPost]

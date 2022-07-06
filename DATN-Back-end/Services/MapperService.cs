@@ -25,7 +25,9 @@ namespace DATN_Back_end.Services
             cfg.CreateMap<User, UserItem>()
                 .ForMember(user => user.Department,
                 option => option.MapFrom(user => user.Department.ConvertTo<DepartmentShorted>()));
-            cfg.CreateMap<User, UserDetail>();
+            cfg.CreateMap<User, UserDetail>()
+                .ForMember(user => user.Department,
+                    option => option.MapFrom(user => user.Department.ConvertTo<DepartmentShorted>()));
             cfg.CreateMap<User, UserShorted>();
             cfg.CreateMap<UserDetail, User>();
             cfg.CreateMap<UserFormCreate, User>();

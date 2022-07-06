@@ -25,8 +25,25 @@ namespace DATN_Back_end.Repositories
         public async Task<Guid> CheckIn(TimeKeepingForm timeKeepingForm)
         {
             timeKeepingForm.CheckinTime = DateTime.Parse(timeKeepingForm.CheckinTime.ToString()).ToLocalTime();
-            
-            if (timeKeepingForm.CheckinTime.Value.Hour > 9)
+
+            var formRequest = await dataContext.FormRequests
+                .Include(x => x.FormStatus)
+                .Where(x => x.UserId == timeKeepingForm.UserId
+                && x.RequestDate.Day == timeKeepingForm.CheckinTime.Value.Day
+                && x.RequestDate.Month == timeKeepingForm.CheckinTime.Value.Month
+                && x.RequestDate.Year == timeKeepingForm.CheckinTime.Value.Year
+                && x.RequestTypeId == 5)
+                .FirstOrDefaultAsync();
+
+            if (formRequest != null)
+            {
+                if (timeKeepingForm.CheckinTime.Value.Hour > 9 && formRequest.FormStatus.Status != "Approved")
+                {
+                    timeKeepingForm.IsPunished = true;
+                    timeKeepingForm.PunishedTime += 1;
+                }
+            }
+            else
             {
                 timeKeepingForm.IsPunished = true;
                 timeKeepingForm.PunishedTime += 1;
@@ -47,14 +64,33 @@ namespace DATN_Back_end.Repositories
                 DateTime.Compare(timeKeepingForm.CheckinTime.Value.Date, x.CheckinTime.Value.Date) == 0)
                 .FirstOrDefaultAsync();
 
+            var formRequest = await dataContext.FormRequests
+                .Include(x => x.FormStatus)
+                .Where(x => x.UserId == timeKeepingForm.UserId
+                && x.RequestDate.Day == timeKeepingForm.CheckinTime.Value.Day
+                && x.RequestDate.Month == timeKeepingForm.CheckinTime.Value.Month
+                && x.RequestDate.Year == timeKeepingForm.CheckinTime.Value.Year
+                && x.RequestTypeId == 6)
+                .FirstOrDefaultAsync();
+
             timeKeepingForm.CheckoutTime = DateTime.Parse(timeKeepingForm.CheckoutTime.ToString()).ToLocalTime();
 
             timeKeepingForm.CheckinTime = DateTime.Parse(timeKeepingForm.CheckinTime.ToString()).ToLocalTime();
             
             var checkAmOrPm = timeKeepingForm.CheckoutTime.Value.ToString("tt", CultureInfo.InvariantCulture);
 
-            if (timeKeepingForm.CheckoutTime.Value.Hour < 18 && checkAmOrPm == "PM"
-                || checkAmOrPm == "AM")
+            if (formRequest != null)
+            {
+                if (((timeKeepingForm.CheckoutTime.Value.Hour < 18 && checkAmOrPm == "PM")
+                || checkAmOrPm == "AM") && formRequest.FormStatus.Status != "Approved")
+                {
+                    timeKeepingForm.IsPunished = true;
+                    timeKeepingForm.PunishedTime = entry.PunishedTime;
+                    timeKeepingForm.PunishedTime++;
+                }
+            }
+            
+            else
             {
                 timeKeepingForm.IsPunished = true;
                 timeKeepingForm.PunishedTime = entry.PunishedTime;

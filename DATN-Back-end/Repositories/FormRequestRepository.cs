@@ -22,6 +22,7 @@ namespace DATN_Back_end.Repositories
 
         public async Task Create(FormRequestForm formRequest)
         {
+            formRequest.RequestDate = DateTime.Parse(formRequest.RequestDate.ToString()).ToLocalTime();
             formRequest.SubmittedTime = DateTime.Now;
 
             await base.Create(formRequest);
@@ -112,18 +113,23 @@ namespace DATN_Back_end.Repositories
                 && x.CheckinTime.Value.Year == entry.RequestDate.Year)
                 .FirstOrDefaultAsync();
 
-            if (timekeeping.PunishedTime < 1 && entry.RequestTypeId != 5)
+            if (timekeeping != null)
             {
-                throw new BadRequestException("This user didnt be punished this day");
+                if (timekeeping.PunishedTime < 1 && entry.RequestTypeId != 5 && entry.RequestTypeId != 6)
+                {
+                    throw new BadRequestException("This user didnt be punished this day");
+                }
+
+                if (formRequestConfirm.StatusId == 2 && timekeeping.PunishedTime != 0)
+                {
+                    timekeeping.PunishedTime = timekeeping.PunishedTime - 1;
+                }
+
+                var entryTimeKeeping = await dataContext.Timekeepings.FindAsync(timekeeping.Id);
+                timekeeping.CopyTo(entryTimeKeeping);
+                dataContext.Entry(entryTimeKeeping);
             }
 
-            if (formRequestConfirm.StatusId == 2 && timekeeping.PunishedTime != 0)
-            {
-                timekeeping.PunishedTime = timekeeping.PunishedTime - 1;
-            }
-
-            var entryTimeKeeping = await dataContext.Timekeepings.FindAsync(timekeeping.Id);
-            timekeeping.CopyTo(entryTimeKeeping);
             dataContext.Entry(entry).State = EntityState.Modified;
 
             await dataContext.SaveChangesAsync();

@@ -60,7 +60,30 @@ namespace DATN_Back_end.Repositories
         {
             userForm.AvatarUrl = await CheckForUploading(userForm.AvatarUrl);
 
+            var user = await Get(userForm.Email);
+
+            var department = await dataContext.Departments.FindAsync(userForm.DepartmentId.Value);
+
+            if (userForm.Role == Role.Manager && user.Id != department.ManagerId)
+            {
+                throw new BadRequestException("This department already has a manager");
+            }
+
+            if (userForm.Role == Role.Manager && userForm.DepartmentId.ToString() == "")
+            {
+                throw new BadRequestException("Manager must be placed in at least 1 department");
+            }
+
             await base.Update(id, userForm);
+        }
+
+        public async Task<UserDetail> Get(Guid Id)
+        {
+            return await dataContext.Users
+                .Include(x => x.Department)
+                .Where(x => x.Id == Id)
+                .Select(x => x.ConvertTo<UserDetail>())
+                .FirstOrDefaultAsync();
         }
 
         public async Task<User> GetById(Guid Id)
