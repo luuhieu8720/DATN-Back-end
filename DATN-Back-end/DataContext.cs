@@ -90,7 +90,7 @@ namespace DATN_Back_end
                 .HasData(new RequestType()
                 {
                     Id = 2,
-                    TypeName = "Off mornig"
+                    TypeName = "Off morning"
                 });
 
             modelBuilder.Entity<RequestType>()
@@ -105,6 +105,18 @@ namespace DATN_Back_end
                 {
                     Id = 4,
                     TypeName = "Off by hour"
+                });
+            modelBuilder.Entity<RequestType>()
+                .HasData(new RequestType()
+                {
+                    Id = 5,
+                    TypeName = "Lately checkin"
+                });
+            modelBuilder.Entity<RequestType>()
+                .HasData(new RequestType()
+                {
+                    Id = 6,
+                    TypeName = "Early checkout"
                 });
         }
 
