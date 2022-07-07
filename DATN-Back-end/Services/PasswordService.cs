@@ -97,9 +97,9 @@ namespace DATN_Back_end.Services
             await sendMailService.Send(mailContent);
         }
 
-        public async Task Update(UpdatePasswordForm updatePasswordForm)
+        public async Task Update(Guid id, UpdatePasswordForm updatePasswordForm)
         {
-            var userId = authenticationService.CurrentUser.Id;
+            var userId = id;
             var currentUser = await dataContext.Users.FindAsync(userId);
 
             if (currentUser.Password != updatePasswordForm.OldPassword.Encrypt())

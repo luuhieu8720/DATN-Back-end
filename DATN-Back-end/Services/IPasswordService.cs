@@ -12,6 +12,6 @@ namespace DATN_Back_end.Services
 
         Task Change(ChangePasswordForm changePasswordForm);
 
-        Task Update(UpdatePasswordForm updatePasswordForm);
+        Task Update(Guid id, UpdatePasswordForm updatePasswordForm);
     }
 }

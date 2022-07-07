@@ -24,7 +24,7 @@ namespace DATN_Back_end.Controllers
         [HttpPost("change")]
         public async Task Change([FromBody]ChangePasswordForm changePasswordForm) => await passwordService.Change(changePasswordForm);
 
-        [HttpPut("update")]
-        public async Task Update([FromBody] UpdatePasswordForm updatePasswordForm) => await passwordService.Update(updatePasswordForm);
+        [HttpPut("update/{id}")]
+        public async Task Update(Guid id, [FromBody] UpdatePasswordForm updatePasswordForm) => await passwordService.Update(id, updatePasswordForm);
     }
 }
