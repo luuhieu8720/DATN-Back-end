@@ -7,6 +7,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
+RUN apt-get update && apt-get install -y libgdiplus
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
