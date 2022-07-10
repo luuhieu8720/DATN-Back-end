@@ -55,7 +55,7 @@ namespace DATN_Back_end
                     Password = "employee123456".Encrypt(),
                     FirstName = "Employee",
                     LastName = "01",
-                    Role = Role.Manager
+                    Role = Role.Employee
                 });
 
             modelBuilder.Entity<FormStatus>()

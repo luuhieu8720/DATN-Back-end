@@ -17,7 +17,7 @@ namespace DATN_Back_end.Repositories
 
         Task Update(Guid id, ReportFormDto reportFormDto);
 
-        Task<List<ReportItem>> GetReportsByUserId();
+        Task<List<ReportItem>> GetReportsByUserId(Guid id);
 
         Task<ReportDetail> GetReportsByDateForUser(DateTime dateTime);
 

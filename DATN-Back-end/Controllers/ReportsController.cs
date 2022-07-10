@@ -38,8 +38,8 @@ namespace DATN_Back_end.Controllers
         public async Task<ReportDetail> Get(Guid id) => await reportRepository.Get(id);
 
         [Authorize]
-        [HttpGet("user/all")]
-        public async Task<List<ReportItem>> GetReportsByUserId() => await reportRepository.GetReportsByUserId();
+        [HttpGet("user/all/{id}")]
+        public async Task<List<ReportItem>> GetReportsByUserId(Guid id) => await reportRepository.GetReportsByUserId(id);
 
         [Authorize]
         [HttpPost("filter/all")]

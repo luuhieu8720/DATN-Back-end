@@ -109,9 +109,9 @@ namespace DATN_Back_end.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<ReportItem>> GetReportsByUserId()
+        public async Task<List<ReportItem>> GetReportsByUserId(Guid id)
         {
-            var currentUserId = authenticationService.CurrentUserId;
+            var currentUserId = id;
 
             return await dataContext.Reports
                 .Where(x => x.UserId == currentUserId)
