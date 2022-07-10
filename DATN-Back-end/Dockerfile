@@ -24,3 +24,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "DATN-Back-end.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet HerokuApp.dll
